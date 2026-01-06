@@ -1,5 +1,5 @@
 // src/configs/all-blogs-data.ts
-import type blogInterface from "../interfaces/blogInterface";
+import type { blogInterface } from "../interfaces/blogInterface";
 
 const blogs: blogInterface[] = [
   {

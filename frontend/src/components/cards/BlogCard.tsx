@@ -1,7 +1,7 @@
 import { FaRegCalendarCheck, FaRegUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 // Note: Agar interface file mein 'slug' nahi hai, toh use add kar lena
-import type blogInterface from "../../interfaces/blogInterface";
+import type { blogInterface } from "../../interfaces/blogInterface";
 
 const BlogCard: React.FC<blogInterface> = ({
   category = "",

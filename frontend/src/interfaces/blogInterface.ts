@@ -1,13 +1,21 @@
 // src/interfaces/blogInterface.ts
-export default interface blogInterface {
-  id: string;           // Yeh URL mein use hoga → /blogs/Top-SEO-Trends...
-  slug?: string;        // Future ke liye (optional)
+
+export interface blogInterface {
+  _id?: string;          // Backend MongoDB ID
+  id: string;            // Slug/Frontend ID
+  slug?: string;
   category: string;
   author: string;
-  date: string;
+  date?: string;         
+  
+  // ✅ Isse optional (?) kar dein taaki static data fail na ho
+  createdAt?: string;    
+
   title: string;
-  description: string;  // Full ya short description
-  summary?: string;     // Blog list ke liye short text
+  description: string;
+  summary?: string;
   image: string;
-  content?: string;     // Future mein full blog content yaha aayega
+  content?: string;
+  locked?: boolean;      // Admin lock status
+  status?: string;       // published/draft
 }

@@ -6,33 +6,32 @@ import {
   FiRefreshCw, FiUpload, FiX, FiUser, FiCalendar
 } from "react-icons/fi";
 import { useDebounce } from "use-debounce";
+// ✅ IMPORT INTERFACE
+import type { blogInterface } from "../../interfaces/blogInterface";
 
-// ✅ UPDATED: Environment variable for API and Base URL
-const API_BASE = import.meta.env.VITE_API_URL; // e.g., http://localhost:5000/api
-const MEDIA_BASE = API_BASE.replace('/api', ''); // e.g., http://localhost:5000
+const API_BASE = import.meta.env.VITE_API_URL;
+const MEDIA_BASE = API_BASE.replace('/api', '');
 
 const BlogDashboard: React.FC = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  // ✅ UPDATED: Used blogInterface instead of Blog
+  const [blogs, setBlogs] = useState<blogInterface[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 300);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
+  const [currentBlog, setCurrentBlog] = useState<blogInterface | null>(null);
 
-  // FETCH BLOGS LOGIC
   const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
-      // ✅ UPDATED: Using backticks with Environment Variable
       const response = await axios.get(`${API_BASE}/blogs/admin?t=${new Date().getTime()}`);
-      
       const incomingData = response.data.data || (Array.isArray(response.data) ? response.data : []);
       setBlogs(incomingData);
       setError(null);
     } catch (err: any) {
       console.error("Fetch Error:", err);
-      setError(`Fetch failed: ${err.message}. Backend check karein.`);
+      setError(`Fetch failed: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -45,14 +44,13 @@ const BlogDashboard: React.FC = () => {
   const handleSave = async (formData: FormData) => {
     try {
       setLoading(true);
-      const id = currentBlog?._id;
+      // ✅ UPDATED: Checking for _id from backend
+      const id = currentBlog?._id || currentBlog?.id;
       const config = { headers: { "Content-Type": "multipart/form-data" } };
 
       if (id) {
-        // ✅ UPDATED: Dynamic URL
         await axios.put(`${API_BASE}/blogs/${id}`, formData, config);
       } else {
-        // ✅ UPDATED: Dynamic URL
         await axios.post(`${API_BASE}/blogs`, formData, config);
       }
       
@@ -68,7 +66,6 @@ const BlogDashboard: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
-        // ✅ UPDATED: Dynamic URL
         await axios.delete(`${API_BASE}/blogs/${id}`);
         fetchBlogs();
       } catch (err) {
@@ -79,13 +76,11 @@ const BlogDashboard: React.FC = () => {
 
   const handleToggleLock = async (id: string) => {
     try {
-      // ✅ UPDATED: Dynamic URL
       await axios.patch(`${API_BASE}/blogs/${id}/lock`);
       fetchBlogs();
     } catch (err) { console.error(err); }
   };
 
-  // ... (Search and Table filtering logic same remains) ...
   const filteredBlogs = useMemo(() => {
     return blogs.filter(b => 
       b.title?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
@@ -130,33 +125,33 @@ const BlogDashboard: React.FC = () => {
                 <th className="p-4">Title</th>
                 <th className="p-4">Author</th>
                 <th className="p-4">Date</th>
-                <th className="p-4">Status</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
               {filteredBlogs.length > 0 ? (
                 filteredBlogs.map((blog) => (
-                  <tr key={blog._id} className="hover:bg-gray-800/30 transition-colors">
+                  <tr key={blog._id || blog.id} className="hover:bg-gray-800/30 transition-colors">
                     <td className="p-4 font-medium text-white max-w-[250px] truncate">{blog.title}</td>
                     <td className="p-4 text-gray-300 font-semibold italic">{blog.author || "Admin"}</td>
                     <td className="p-4 text-gray-400 text-sm">
                         {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-GB') : "N/A"}
                     </td>
-                    <td className="p-4">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${blog.status === 'published' ? 'bg-green-900/30 text-green-500' : 'bg-yellow-900/30 text-yellow-500'}`}>
-                        {blog.status}
-                      </span>
-                    </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-3">
-                        <button onClick={() => blog._id && handleToggleLock(blog._id)} className={blog.locked ? "text-green-500" : "text-yellow-600"}>
-                          {blog.locked ? <FiUnlock size={18}/> : <FiLock size={18}/>}
+                        <button onClick={() => {
+                          const id = blog._id || blog.id;
+                          if(id) handleToggleLock(id);
+                        }} className="text-yellow-600">
+                          <FiLock size={18}/>
                         </button>
                         <button onClick={() => { setCurrentBlog(blog); setIsFormOpen(true); }} className="text-blue-400 hover:text-blue-300">
                           <FiEdit2 size={18}/>
                         </button>
-                        <button onClick={() => blog._id && handleDelete(blog._id)} className="text-red-600 hover:text-red-500">
+                        <button onClick={() => {
+                          const id = blog._id || blog.id;
+                          if(id) handleDelete(id);
+                        }} className="text-red-600 hover:text-red-500">
                           <FiTrash2 size={18}/>
                         </button>
                       </div>
@@ -193,14 +188,12 @@ const BlogFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
     title: "", 
     content: "", 
     description: "", 
-    status: "published", 
     category: "Marketing", 
     author: "Admin",
     createdAt: new Date().toISOString().split('T')[0]
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
-  // ✅ UPDATED: Media base URL from environment
   const [preview, setPreview] = useState<string>(initialData?.image ? `${MEDIA_BASE}${initialData.image}` : "");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +208,10 @@ const BlogFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
     e.preventDefault();
     const formData = new FormData();
     Object.keys(data).forEach(key => {
-      if (data[key] !== undefined) formData.append(key, data[key]);
+      // ✅ Don't append _id to FormData if it's a new post
+      if (key !== '_id' && data[key] !== undefined) {
+          formData.append(key, data[key]);
+      }
     });
     if (imageFile) formData.append("image", imageFile);
     onSave(formData);
@@ -257,21 +253,9 @@ const BlogFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
                     <option value="Marketing">Marketing</option>
                     <option value="SEO">SEO</option>
                     <option value="Development">Development</option>
-                    <option value="Development">Socail Media Marketing</option>
-                    <option value="Development">E-Commerce Seo</option>
-                    <option value="Development">Digital Marketing</option>
-                    <option value="Development">Analytics</option>
-                    <option value="Development">Influencer Marketing</option>
-                    <option value="Development">Video Marketing</option>
-                    <option value="Development">PPC Advertising</option>
-                    <option value="Development">Content Marketing</option>
-                </select>
-            </div>
-            <div>
-                <label className="text-[10px] text-red-500 font-black mb-1 block uppercase">Status</label>
-                <select className="w-full bg-[#1a1a1a] border border-gray-800 p-3 text-white rounded outline-none focus:border-red-600" value={data.status} onChange={e => setData({...data, status: e.target.value})}>
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
+                    <option value="Social Media">Social Media Marketing</option>
+                    <option value="E-Commerce">E-Commerce Seo</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
                 </select>
             </div>
           </div>
