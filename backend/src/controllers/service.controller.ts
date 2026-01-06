@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import Service from "../models/service.model";
+// ✅ Fixed: Named import use kiya hai as per your model export
+import { Service } from "../models/service.model";
 
 // Title ko URL friendly slug mein badalne ke liye function
 const generateSlug = (title: string) => {
@@ -13,7 +14,7 @@ const generateSlug = (title: string) => {
 
 // @desc    Get all services
 // @route   GET /api/services
-export const getServices = async (req: Request, res: Response) => {
+export const getServices = async (req: Request, res: Response): Promise<void> => {
   try {
     const services = await Service.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: services });
@@ -24,7 +25,7 @@ export const getServices = async (req: Request, res: Response) => {
 
 // @desc    Create a service
 // @route   POST /api/services
-export const createService = async (req: Request, res: Response) => {
+export const createService = async (req: Request, res: Response): Promise<void> => {
   try {
     const { title, description, badge, link, mainImg, galleryImgs } = req.body;
 
@@ -40,12 +41,12 @@ export const createService = async (req: Request, res: Response) => {
       parsedGallery = typeof galleryImgs === 'string' ? JSON.parse(galleryImgs) : galleryImgs;
     }
 
-    // 3. Slug generation (Duplicate error se bachne ke liye)
+    // 3. Slug generation
     const slug = generateSlug(title);
 
     const newService = await Service.create({
       title,
-      slug, // Model mein slug field hona chahiye
+      slug, 
       description,
       badge,
       link,
@@ -62,13 +63,14 @@ export const createService = async (req: Request, res: Response) => {
 
 // @desc    Update a service
 // @route   PUT /api/services/:id
-export const updateService = async (req: Request, res: Response) => {
+export const updateService = async (req: Request, res: Response): Promise<void> => {
   try {
     const { title, description, badge, link, mainImg, galleryImgs } = req.body;
 
     const existingService = await Service.findById(req.params.id);
     if (!existingService) {
-      return res.status(404).json({ success: false, message: "Service not found" });
+      res.status(404).json({ success: false, message: "Service not found" });
+      return; // ✅ Fix: Added return to prevent TS7030 error
     }
 
     let updateData: any = { 
@@ -76,7 +78,7 @@ export const updateService = async (req: Request, res: Response) => {
         description, 
         badge, 
         link,
-        slug: generateSlug(title) // Update par slug bhi refresh hoga
+        slug: generateSlug(title) 
     };
 
     // Image update logic
@@ -106,11 +108,12 @@ export const updateService = async (req: Request, res: Response) => {
 
 // @desc    Delete a service
 // @route   DELETE /api/services/:id
-export const deleteService = async (req: Request, res: Response) => {
+export const deleteService = async (req: Request, res: Response): Promise<void> => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
-      return res.status(404).json({ success: false, message: "Service not found" });
+      res.status(404).json({ success: false, message: "Service not found" });
+      return; // ✅ Fix: Added return to prevent TS7030 error
     }
 
     await Service.findByIdAndDelete(req.params.id);

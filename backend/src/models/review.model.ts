@@ -30,10 +30,11 @@ const reviewSchema = new Schema<IReview>(
     status: {
       type: String,
       enum: ["active", "inactive", "draft"],
-      default: "active", // default publish immediately
+      default: "active",
     },
   },
   { timestamps: true }
 );
 
+// ✅ Named Export: Dashboard mein import { Review } use karein
 export const Review = mongoose.model<IReview>("Review", reviewSchema);

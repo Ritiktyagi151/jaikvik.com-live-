@@ -1,4 +1,3 @@
-// service.model.ts
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IGalleryImage {
@@ -8,7 +7,7 @@ export interface IGalleryImage {
 
 export interface IService extends Document {
   title: string;
-  slug: string; // Add this
+  slug: string;
   description: string;
   badge?: string;
   link: string;
@@ -19,7 +18,7 @@ export interface IService extends Document {
 const ServiceSchema: Schema = new Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, unique: true }, // Add this (Index clean karne ke baad hi chalega)
+    slug: { type: String, unique: true }, 
     description: { type: String, required: true },
     badge: { type: String },
     link: { type: String, required: true },
@@ -34,4 +33,9 @@ const ServiceSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model<IService>("Service", ServiceSchema);
+// ✅ Named export: Dashboard aur Controller mein import { Service } use karne ke liye
+export const Service = mongoose.model<IService>("Service", ServiceSchema);
+
+// ✅ Optional: Default export add kar rahe hain taaki agar controller mein bina {} ke import ho toh error na aaye
+export default Service;
+
