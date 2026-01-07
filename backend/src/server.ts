@@ -1,4 +1,4 @@
-// server.ts - Updated Implementation for Jaikvik Technology Backend
+// server.ts - Jaikvik Technology Production Ready
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -16,11 +16,11 @@ import { errorHandler } from "./middleware/errorHandler";
 import { notFound } from "./middleware/notFound";
 import logger from "./utils/logger";
 
-// --- Import All Routes ---
+// --- Route Imports ---
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import blogRoutes from "./routes/blog.routes";
-import careerRoutes from "./routes/career.routes"; // ✅ Updated
+import careerRoutes from "./routes/career.routes";
 import contactRoutes from "./routes/contact.routes";
 import serviceRoutes from "./routes/service.routes";
 import videoRoutes from "./routes/video.routes";
@@ -45,29 +45,69 @@ import navbarRoutes from "./routes/navbar.routes";
 import aboutRoutes from "./routes/about.routes";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 
 // ✅ Database Connection
 connectDB();
 
-// ✅ Setup Uploads Directory
+// ✅ Setup Uploads Directory (Production mein absolute path handle karta hai)
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
+    console.log("📁 Uploads directory created successfully");
 }
 
-// ✅ Security & CORS
-app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
-app.use(cors({ origin: true, credentials: true }));
+// ✅ Security Middleware
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+// ✅ CORS Configuration - Production Ready
+const allowedOrigins = [
+    'http://localhost:7777',     // Local React/Vite
+    'https://jaikvik.com',       // Your Live Domain
+    'https://www.jaikvik.com',   // WWW Version
+];
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps or curl requests)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error("CORS: Access denied for this origin."));
+            }
+        },
+        credentials: true,
+    })
+);
 
 // ✅ Body Parsing
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(compression());
-app.use(morgan("combined", { stream: { write: (msg) => logger.info(msg.trim()) } }));
 
-// ✅ Static Folder (Resumes aur Images ke liye)
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// ✅ Performance & Logging
+app.use(compression());
+if (process.env.NODE_ENV !== "test") {
+    app.use(
+        morgan("combined", {
+            stream: { write: (message: string) => logger.info(message.trim()) },
+        })
+    );
+}
+
+// ✅ Rate Limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 2000, 
+    message: "Too many requests, please try again later.",
+});
+app.use("/api/", limiter);
+
+// ✅ Static Folder for Images
+app.use("/uploads", express.static(uploadDir));
 
 // ✅ API Routes Registration
 app.use("/api/auth", authRoutes);
@@ -76,10 +116,7 @@ app.use("/api/websites", websiteRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/footer", footerRoutes);
-
-// ✅ Career Section (Changed to /api/careers to fix 404)
-app.use("/api/careers", careerRoutes); 
-
+app.use("/api/careers", careerRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/videos", videoRoutes);
@@ -100,12 +137,22 @@ app.use("/api/team", teamRoutes);
 app.use("/api/testimonial-videos", testimonialVideoRoutes);
 app.use("/api/navbar", navbarRoutes);
 
-app.get("/health", (req, res) => res.status(200).json({ status: "OK" }));
+// ✅ Root/Health Check
+app.get("/", (req, res) => {
+    res.send("🚀 Jaikvik Technology API is running...");
+});
 
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
+// ✅ Error Handling
 app.use(notFound);
 app.use(errorHandler);
 
+// ✅ Server Startup
 app.listen(PORT, () => {
+    logger.info(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
     console.log(`🚀 Jaikvik Backend live at http://localhost:${PORT}`);
 });
 

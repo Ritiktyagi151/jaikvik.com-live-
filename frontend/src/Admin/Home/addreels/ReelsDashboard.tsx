@@ -4,7 +4,9 @@ import ReelTable from "./ReelTable";
 import ReelForm from "./ReelForm";
 import type { Reel, ReelFormData } from "./reel";
 
-const API_URL = "http://localhost:5000/api/reels";
+// ✅ API URL Configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5002/api";
+const API_URL = `${API_BASE_URL}/reels`;
 
 const ReelsDashboard = () => {
   const [reels, setReels] = useState<Reel[]>([]);
@@ -21,15 +23,21 @@ const ReelsDashboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(API_URL);
-      // MongoDB _id ko frontend ki id field mein map kar rahe hain
-      const formattedData = response.data.map((r: any) => ({
-        ...r,
-        id: r._id,
-      }));
-      setReels(formattedData);
+      
+      // ✅ Dono patterns handle kiye hain: {success: true, data: []} ya direct []
+      const rawData = response.data.data || response.data;
+      const isSuccess = response.data.success !== undefined ? response.data.success : true;
+
+      if (isSuccess && Array.isArray(rawData)) {
+        const formattedData = rawData.map((r: any) => ({
+          ...r,
+          id: r._id || r.id, // MongoDB _id handle karne ke liye
+        }));
+        setReels(formattedData);
+      }
     } catch (error) {
       console.error("Error fetching reels:", error);
-      alert("Failed to load reels");
+      alert("Failed to load reels. Please check if Backend is running.");
     } finally {
       setLoading(false);
     }
@@ -39,12 +47,17 @@ const ReelsDashboard = () => {
   const handleCreate = async (formData: ReelFormData) => {
     try {
       const response = await axios.post(API_URL, formData);
-      const newReel = { ...response.data, id: response.data._id };
-      setReels([newReel, ...reels]);
-      setShowForm(false);
+      const result = response.data.data || response.data;
+
+      if (result) {
+        const newReel = { ...result, id: result._id || result.id };
+        setReels((prev) => [newReel, ...prev]);
+        setShowForm(false);
+        alert("Reel added successfully!");
+      }
     } catch (error) {
       console.error("Error creating reel:", error);
-      alert("Error saving reel");
+      alert("Error saving reel. Make sure all fields are filled.");
     }
   };
 
@@ -52,13 +65,20 @@ const ReelsDashboard = () => {
   const handleUpdate = async (id: string, formData: ReelFormData) => {
     try {
       const response = await axios.put(`${API_URL}/${id}`, formData);
-      const updatedReel = { ...response.data, id: response.data._id };
-      setReels(reels.map((reel) => (reel.id === id ? updatedReel : reel)));
-      setEditingReel(null);
-      setShowForm(false);
+      const result = response.data.data || response.data;
+
+      if (result) {
+        const updatedReel = { ...result, id: result._id || result.id };
+        setReels((prev) =>
+          prev.map((reel) => (reel.id === id ? updatedReel : reel))
+        );
+        setEditingReel(null);
+        setShowForm(false);
+        alert("Reel updated successfully!");
+      }
     } catch (error) {
       console.error("Error updating reel:", error);
-      alert("Error updating reel");
+      alert("Error updating reel.");
     }
   };
 
@@ -66,11 +86,15 @@ const ReelsDashboard = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this reel?")) {
       try {
-        await axios.delete(`${API_URL}/${id}`);
-        setReels(reels.filter((reel) => reel.id !== id));
+        const response = await axios.delete(`${API_URL}/${id}`);
+        // Check if delete was successful
+        if (response.status === 200 || response.data.success) {
+          setReels((prev) => prev.filter((reel) => reel.id !== id));
+          alert("Reel deleted.");
+        }
       } catch (error) {
         console.error("Error deleting reel:", error);
-        alert("Error deleting reel");
+        alert("Error deleting reel.");
       }
     }
   };
@@ -78,6 +102,7 @@ const ReelsDashboard = () => {
   const handleEdit = (reel: Reel) => {
     setEditingReel(reel);
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const toggleForm = () => {
@@ -86,34 +111,48 @@ const ReelsDashboard = () => {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen p-6">
+    <div className="bg-black text-white min-h-screen p-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-red-500">Reels Dashboard</h1>
-
-        <div className="flex justify-between items-center mb-6">
-          <div className="text-xl">
-            Total Reels:{" "}
-            <span className="text-red-500 font-bold">
-              {loading ? "..." : reels.length}
-            </span>
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold text-red-600 tracking-tight">REELS ADMIN</h1>
+            <p className="text-gray-400 mt-1">Manage your social media content</p>
           </div>
+          
           <button
             onClick={toggleForm}
-            className={`flex items-center gap-2 px-6 py-3 text-white font-bold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg ${
+            className={`flex items-center gap-2 px-8 py-3 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl ${
               showForm
-                ? "bg-gray-600 hover:bg-gray-700 shadow-gray-900/30"
-                : "bg-red-600 hover:bg-red-700 shadow-red-900/30"
+                ? "bg-zinc-700 hover:bg-zinc-600"
+                : "bg-red-600 hover:bg-red-700 shadow-red-900/40"
             }`}
           >
-            {/* SVG Icon Logic Same as before */}
-            {showForm ? "Cancel" : "Add New Reel"}
+            {showForm ? "✕ Cancel" : "+ Add New Reel"}
           </button>
+        </header>
+
+        {/* Status Bar */}
+        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-8 flex items-center gap-6">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 uppercase font-bold">Total Content</span>
+            <span className="text-2xl font-mono text-red-500">
+              {loading ? "--" : reels.length}
+            </span>
+          </div>
+          <div className="h-10 w-[1px] bg-zinc-800"></div>
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 uppercase font-bold">Status</span>
+            <span className="text-sm text-green-500 flex items-center gap-1">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online
+            </span>
+          </div>
         </div>
 
+        {/* Form Section */}
         {(showForm || editingReel) && (
-          <div className="bg-gray-900 rounded-lg shadow-lg p-6 mb-8 border border-red-500">
-            <h2 className="text-xl font-semibold mb-4 text-red-500">
-              {editingReel ? "Edit Reel" : "Add New Reel"}
+          <div className="bg-zinc-900 rounded-2xl shadow-2xl p-8 mb-12 border border-red-600/30 animate-in fade-in slide-in-from-top-4 duration-500">
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+              {editingReel ? "✍️ Edit Video Details" : "🎥 Upload New Reel"}
             </h2>
             <ReelForm
               onSubmit={
@@ -130,16 +169,32 @@ const ReelsDashboard = () => {
           </div>
         )}
 
-        <div className="bg-gray-900 rounded-lg shadow-lg p-6 border border-red-500">
-          <h2 className="text-xl font-semibold mb-4 text-red-500">Manage Reels</h2>
+        {/* Table Section */}
+        <div className="bg-zinc-900 rounded-2xl shadow-xl overflow-hidden border border-zinc-800">
+          <div className="p-6 border-b border-zinc-800 flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-200">Content Library</h2>
+          </div>
+          
           {loading ? (
-            <div className="text-center py-10">Loading Reels...</div>
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-gray-500 animate-pulse">Syncing with database...</p>
+            </div>
           ) : (
-            <ReelTable
-              reels={reels}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <div className="p-2">
+               <ReelTable
+                reels={reels}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </div>
+          )}
+
+          {!loading && reels.length === 0 && (
+            <div className="text-center py-20 bg-zinc-900/50">
+               <p className="text-gray-500 text-lg">No reels found in the database.</p>
+               <button onClick={() => setShowForm(true)} className="text-red-500 mt-2 underline">Create your first reel</button>
+            </div>
           )}
         </div>
       </div>

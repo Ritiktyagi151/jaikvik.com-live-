@@ -2,20 +2,20 @@ import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
-import axios from "axios"; // Axios import karein
+import axios from "axios"; 
 import ArrowLeft from "../../components/arrows/ArrowLeft";
 import ArrowRight from "../../components/arrows/ArrowRight";
 import ReelVideoCard from "../../components/cards/ReelVideoCard";
 
-// Ab hum static 'reels' config use nahi karenge, API se layenge
-const API_URL = "http://localhost:5000/api/reels";
+// ✅ Dynamic Environment Variable use kar rahe hain
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = `${API_BASE_URL}/reels`;
 
 const SocialMediaSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isAutoplayPaused, setIsAutoplayPaused] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   
-  // Data ke liye state
   const [reelsData, setReelsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +23,16 @@ const SocialMediaSection = () => {
   useEffect(() => {
     const fetchReels = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(API_URL);
-        setReelsData(response.data);
+        
+        // ✅ Blog style response handling: response.data.success aur response.data.data
+        if (response.data.success) {
+          setReelsData(response.data.data);
+        } else {
+          // Fallback agar direct array mil raha ho
+          setReelsData(Array.isArray(response.data) ? response.data : []);
+        }
       } catch (error) {
         console.error("Error fetching reels for slider:", error);
       } finally {
@@ -57,12 +65,10 @@ const SocialMediaSection = () => {
     }
   };
 
-  // Agar data load ho raha ho toh empty state ya loader dikha sakte hain
   if (loading) return <div className="h-40 flex items-center justify-center text-white">Loading Reels...</div>;
 
   return (
     <div className="overflow-hidden h-auto my-4">
-      {/* Heading */}
       <div className="websiteHeading mb-4">
         <h2 className="uppercase text-gray-200 text-xl inline-block relative">
           <a href="#" className="flex font-bold items-center gap-1.5 ml-2">
@@ -71,7 +77,6 @@ const SocialMediaSection = () => {
         </h2>
       </div>
 
-      {/* Swiper Section */}
       <div className="w-full group relative">
         <Swiper
           modules={[Navigation, Autoplay]}
@@ -89,7 +94,7 @@ const SocialMediaSection = () => {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
-          loop={reelsData.length > 4} // Loop tabhi chale jab kaafi reels hon
+          loop={reelsData.length > 4} 
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -116,12 +121,10 @@ const SocialMediaSection = () => {
           ))}
         </Swiper>
 
-        {/* Navigation arrows */}
         <ArrowLeft onClick={() => swiperRef.current?.slidePrev()} />
         <ArrowRight onClick={() => swiperRef.current?.slideNext()} />
       </div>
 
-      {/* Fullscreen Video Modal (only for mobile) */}
       {selectedVideo && (
         <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
           <button
