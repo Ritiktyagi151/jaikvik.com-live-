@@ -1,38 +1,59 @@
 import mongoose from "mongoose";
 import logger from "../utils/logger";
 
+/**
+ * MongoDB Connection Setup
+ * Isme Local aur Production dono ka logic automatic switch hota hai
+ */
 export const connectDB = async (): Promise<void> => {
   try {
-    const mongoURI =
-      process.env.NODE_ENV === "production"
-        ? process.env.MONGODB_URI_PROD
-        : process.env.MONGODB_URI;
+    // TypeScript Fix: Safe environment variable access
+    const currentEnv = process.env.NODE_ENV || "development";
+    const isProduction = currentEnv === "production";
+
+    // URI select karna
+    const mongoURI = isProduction
+      ? process.env.MONGODB_URI_PROD
+      : process.env.MONGODB_URI;
 
     if (!mongoURI) {
-      throw new Error("MongoDB URI is not defined in environment variables");
+      logger.error(`❌ MongoDB URI is not defined for ${currentEnv} mode`);
+      process.exit(1);
     }
 
-    const conn = await mongoose.connect(mongoURI);
+    // Connection Options for Stability
+    const options = {
+      maxPoolSize: 10,               
+      serverSelectionTimeoutMS: 5000, 
+      socketTimeoutMS: 45000,        
+    };
 
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
+    // Database connect karna
+    const conn = await mongoose.connect(mongoURI, options);
 
-    // Handle connection events
+    // FIX: Using currentEnv variable to avoid TS18048 error
+    logger.info(`🚀 MongoDB Connected [${currentEnv.toUpperCase()}]: ${conn.connection.host}`);
+
+    // --- Connection Events ---
+    
     mongoose.connection.on("error", (err) => {
-      logger.error("MongoDB connection error:", err);
+      logger.error("❌ MongoDB late-stage error:", err);
     });
 
     mongoose.connection.on("disconnected", () => {
-      logger.warn("MongoDB disconnected");
+      logger.warn("⚠️ MongoDB disconnected! Attempting to reconnect...");
     });
 
-    // Graceful shutdown
+    // --- Graceful Shutdown ---
     process.on("SIGINT", async () => {
       await mongoose.connection.close();
-      logger.info("MongoDB connection closed through app termination");
+      logger.info("🛑 MongoDB connection closed (App terminated)");
       process.exit(0);
     });
+
   } catch (error) {
-    logger.error("Error connecting to MongoDB:", error);
+    logger.error("💥 Failed to connect to MongoDB:");
+    logger.error(error);
     process.exit(1);
   }
 };

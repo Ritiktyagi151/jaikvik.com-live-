@@ -1,8 +1,7 @@
-// server.ts - Jaikvik Technology Production Ready
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -10,6 +9,7 @@ import compression from "compression";
 import rateLimit from "express-rate-limit";
 import path from "path";
 import fs from "fs";
+import multer from "multer";
 
 import { connectDB } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
@@ -50,41 +50,25 @@ const PORT = process.env.PORT || 5002;
 // ✅ Database Connection
 connectDB();
 
-// ✅ Setup Uploads Directory (Production mein absolute path handle karta hai)
+// ✅ Setup Uploads Directory
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
     console.log("📁 Uploads directory created successfully");
 }
 
-// ✅ Security Middleware
+// ✅ Security & CORS Middleware
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    // crossOriginResourcePolicy: false zaroori hai taki frontend images access kar sake
+    crossOriginResourcePolicy: false 
 }));
 
-// ✅ CORS Configuration - Production Ready
-const allowedOrigins = [
-    // 🔹 Local Development
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-
-    // 🔹 Production Domains
-    "https://jaikvik.com",
-    "https://www.jaikvik.com",
-];
-
+// Aapka manga hua CORS logic
 app.use(
     cors({
-        origin: (origin, callback) => {
-            // Allow requests with no origin (like mobile apps or curl requests)
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error("CORS: Access denied for this origin."));
-            }
-        },
+        origin: process.env.FRONTEND_URL || "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
     })
 );
@@ -96,14 +80,10 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 // ✅ Performance & Logging
 app.use(compression());
 if (process.env.NODE_ENV !== "test") {
-    app.use(
-        morgan("combined", {
-            stream: { write: (message: string) => logger.info(message.trim()) },
-        })
-    );
+    app.use(morgan("dev"));
 }
 
-// ✅ Rate Limiting
+// ✅ Rate Limiting (Production Security)
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
     max: 2000, 
@@ -113,6 +93,24 @@ app.use("/api/", limiter);
 
 // ✅ Static Folder for Images
 app.use("/uploads", express.static(uploadDir));
+
+// ✅ Image Upload Logic (Multer) - Directly integrated like your old code
+const storage = multer.diskStorage({
+    destination(req, file, cb) {
+        cb(null, "uploads/");
+    },
+    filename(req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
+});
+const upload = multer({ storage });
+
+app.post("/api/upload", upload.single("file"), (req: any, res: any) => {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    res.json({
+        url: `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`,
+    });
+});
 
 // ✅ API Routes Registration
 app.use("/api/auth", authRoutes);
@@ -142,9 +140,9 @@ app.use("/api/team", teamRoutes);
 app.use("/api/testimonial-videos", testimonialVideoRoutes);
 app.use("/api/navbar", navbarRoutes);
 
-// ✅ Root/Health Check
+// ✅ Health Checks
 app.get("/", (req, res) => {
-    res.send("🚀 Jaikvik Technology API is running...");
+    res.json({ success: true, message: "🚀 Jaikvik Technology API is running..." });
 });
 
 app.get("/health", (req, res) => {
@@ -157,7 +155,7 @@ app.use(errorHandler);
 
 // ✅ Server Startup
 app.listen(PORT, () => {
-    logger.info(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+    console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
     console.log(`🚀 Jaikvik Backend live at http://localhost:${PORT}`);
 });
 
