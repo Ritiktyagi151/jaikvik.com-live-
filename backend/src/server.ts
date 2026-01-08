@@ -64,9 +64,14 @@ app.use(helmet({
 
 // ✅ CORS Configuration - Production Ready
 const allowedOrigins = [
-    'http://localhost:7777',     // Local React/Vite
-    'https://jaikvik.com',       // Your Live Domain
-    'https://www.jaikvik.com',   // WWW Version
+    // 🔹 Local Development
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+
+    // 🔹 Production Domains
+    "https://jaikvik.com",
+    "https://www.jaikvik.com",
 ];
 
 app.use(
