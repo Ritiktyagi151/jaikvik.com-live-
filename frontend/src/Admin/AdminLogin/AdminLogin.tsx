@@ -16,11 +16,7 @@ const AdminLogin = () => {
     setLoading(true);
     setError("");
 
-    // Debugging ke liye alert ya console log (Baad mein hata sakte hain)
-    // console.log("Connecting to:", import.meta.env.VITE_API_URL);
-
     try {
-      // ✅ Updated: Backticks use kiye hain aur quotes hata diye hain
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,13 +26,14 @@ const AdminLogin = () => {
       const resData = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("admin-token", resData.data.token);
+        // ✅ KEY FIXED: 'admin-auth' use kiya hai jo Layout se match karega
+        localStorage.setItem("admin-auth", resData.data.token);
         navigate("/admin/dashboard");
       } else {
         setError(resData.message || "Invalid credentials");
       }
     } catch (err) {
-      setError("Server connection failed. Check your API URL.");
+      setError("Server connection failed. Please check your internet or API URL.");
     } finally {
       setLoading(false);
     }
@@ -75,7 +72,7 @@ const AdminLogin = () => {
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition">
+            <button type="submit" disabled={loading} className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition disabled:opacity-50">
               {loading ? "Authenticating..." : "Sign In"}
             </button>
           </div>
