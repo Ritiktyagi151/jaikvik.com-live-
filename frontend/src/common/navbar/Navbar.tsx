@@ -269,7 +269,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center py-2 px-4">
           <Link to="/" className="w-24 h-8">
             <img
-              src="https://jaikvik.com/lab/new-post-video/img/logo/logo-1.png"
+              src="https://jaikvik.in/lab/cloud/jaikvik/assets/images/banner/logo-1.webp"
               alt="logo"
               className="h-full object-contain"
             />

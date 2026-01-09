@@ -2,27 +2,27 @@
 export const softwareDevelopmentItems = [
   {
     href: "/crm",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/crm.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/crm.jpg",
     text: "CRM Software",
   },
   {
     href: "/mobile-application",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/mobile-Application.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/mobile-Application.jpg",
     text: "Mobile Application",
   },
   {
     href: "/erp",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/ERP.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/ERP.jpg",
     text: "ERP Software",
   },
   {
     href: "/cusotmized-software",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/Costumized-Software.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/Costumized-Software.jpg",
     text: "Customized Software",
   },
   {
     href: "/cusotmized-software",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/packages.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/packages.jpg",
     text: "Packages",
   },
 ];
@@ -30,27 +30,27 @@ export const softwareDevelopmentItems = [
 export const websiteDevelopmentItems = [
   {
     href: "/web-development",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/e-commerce.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/e-commerce.jpg",
     text: "E-Commerce",
   },
   {
     href: "/web-development",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/woo-commerce.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/woo-commerce.jpg",
     text: "WooCommerce",
   },
   {
     href: "/web-development",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/corporate-website.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/corporate-website.jpg",
     text: "Corporate Website",
   },
   {
     href: "/web-development",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/online-portal.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/online-portal.jpg",
     text: "Online Portal",
   },
   {
     href: "/web-development",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/packages.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/packages.jpg",
     text: "Packages",
   },
 ];
@@ -58,22 +58,22 @@ export const websiteDevelopmentItems = [
 export const digitalMarketingItems = [
   {
     href: "/social-media-marketing",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/social-media-marketing.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/social-media-marketing.jpg",
     text: "Social Media Marketing",
   },
   {
     href: "/youtube-meta-ads",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/youtube-ads.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/youtube-ads.jpg",
     text: "YouTube & Meta Ads",
   },
   {
     href: "/branding",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/brand-identity-2.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/brand-identity-2.jpg",
     text: "Brand Identity",
   },
   {
     href: "/digital-marketing-agency",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/packages.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/packages.jpg",
     text: "Packages",
   },
 ];
@@ -81,27 +81,27 @@ export const digitalMarketingItems = [
 export const seoServiceItems = [
   {
     href: "/seo-services",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/website-audit.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/website-audit.jpg",
     text: "Website Audit",
   },
   {
     href: "/seo-services",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/technical-seo.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/technical-seo.jpg",
     text: "Technical SEO",
   },
   {
     href: "/seo-services",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/on-page-seo.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/on-page-seo.jpg",
     text: "On-Page SEO",
   },
   {
     href: "/seo-services",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/off-page-seo.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/off-page-seo.jpg",
     text: "Off-Page SEO",
   },
   {
     href: "/seo-services",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/packages.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/packages.jpg",
     text: "SEO Packages",
   },
 ];
@@ -109,42 +109,42 @@ export const seoServiceItems = [
 export const filmProductionItems = [
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/corporate-video-presentaion.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/corporate-video-presentaion.jpg",
     text: "Corporate Video Presentation",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/explanatory-video.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/explanatory-video.jpg",
     text: "Explanatory Video",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/tv-commercial-ads.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/tv-commercial-ads.jpg",
     text: "TV Commercial Ads",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/youtube-ads.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/youtube-ads.jpg",
     text: "YouTube Ads",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/photoshoot .jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/photoshoot .jpg",
     text: "Photoshoot",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/model-shoot.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/model-shoot.jpg",
     text: "Model Shoot",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/interview.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/interview.jpg",
     text: "Interview and Podcast",
   },
   {
     href: "/film-production",
-    img: "https://jaikvik.com/lab/new-post-video/img/Jaikvik-banner/new/packages.jpg",
+    img: "https://jaikvik.in/lab/cloud/jaikvik/assets/images/nabvar/packages.jpg",
     text: "Packages",
   },
 ];

@@ -94,7 +94,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.webp",
       alt: "Role of PPC, Meta, YouTube",
       reverse: true,
     },
@@ -138,7 +138,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Advertising.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Advertising.webp",
       alt: "PPC Overview",
     },
     {
@@ -170,7 +170,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Benefits-of-PPC-Ads.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Benefits-of-PPC-Ads.webp",
       alt: "PPC Benefits",
       reverse: true,
     },
@@ -203,7 +203,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Campaign.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Campaign.webp",
       alt: "PPC Components",
     },
     {
@@ -266,7 +266,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Strategies.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Strategies.webp",
       alt: "PPC Strategies",
     },
     {
@@ -298,7 +298,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ads-Introduction.png",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ads-Introduction.webp",
       alt: "Meta Ads Introduction",
       reverse: true,
     },
@@ -333,7 +333,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ad-Formats.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ad-Formats.webp",
       alt: "Meta Ad Formats",
     },
     {
@@ -365,7 +365,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Audience-Targeting.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Audience-Targeting.webp",
       alt: "Meta Audience Targeting",
       reverse: true,
     },
@@ -397,7 +397,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ad-Creation.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Meta-Ad-Creation.webp",
       alt: "Meta Ad Creation",
     },
     {
@@ -430,7 +430,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.webp",
       alt: "YouTube Ads",
       reverse: true,
     },
@@ -461,7 +461,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.webp",
       alt: "YouTube Ad Types",
     },
     {
@@ -492,7 +492,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Mistakes.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Mistakes.webp",
       alt: "PPC Mistakes",
       reverse: true,
     },
@@ -554,7 +554,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Success-Stories.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Success-Stories.webp",
       alt: "Success Stories",
       reverse: true,
     },
@@ -584,7 +584,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.webp",
       alt: "Conclusion",
     },
     {
@@ -616,7 +616,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Campaign.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/PPC-Campaign.webp",
       alt: "Tools and Resources",
     },
     {
@@ -690,7 +690,7 @@ const Youtube_Meta_Ads: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Why-PPC-Meta,-and-YouTube-Ads-Matter.webp",
       alt: "FAQ",
     },
   ];

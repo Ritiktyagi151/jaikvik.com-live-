@@ -157,7 +157,7 @@ const Brand_Promotion = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Brand-Promotion-Strategies.avif",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Brand-Promotion-Benefits.avif",
       alt: "Brand Promotion Strategies",
       reverse: true,
     },

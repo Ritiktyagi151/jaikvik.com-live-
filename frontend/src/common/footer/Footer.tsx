@@ -74,57 +74,32 @@ const Footer = () => {
 
   return (
     <footer className="bg-main-primary pt-12 px-4 md:px-12 lg:pt-12 lg:px-[28px]">
-      <div className="flex flex-col lg:grid lg:grid-cols-[1.5fr_1fr_1fr_2fr] gap-6 lg:gap-10">
-
-        {/* ===== MOBILE (UNCHANGED) ===== */}
-        <div className="flex gap-6 lg:hidden">
-          {Object.entries(data.socials || {}).map(([platform, url]: any) =>
-            url && (
-              <Link key={platform} to={url} target="_blank">
-                <span className="text-white text-xl hover:text-main-red">
-                  {getSocialIcon(platform)}
-                </span>
-              </Link>
-            )
-          )}
-        </div>
-
-        <div className="lg:hidden">
+      {/* Grid structure: 1 col on mobile, 4 cols on desktop - Style strictly maintained */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_2fr] gap-10">
+        
+        {/* Section 1: Description & Socials */}
+        <div>
+          <div className="flex gap-6 mb-4">
+            {Object.entries(data.socials || {}).map(([platform, url]: any) =>
+              url && (
+                <Link key={platform} to={url} target="_blank">
+                  <span className="text-white text-xl hover:text-main-red transition-all">
+                    {getSocialIcon(platform)}
+                  </span>
+                </Link>
+              )
+            )}
+          </div>
           <p className="text-main-gray text-[16px]">
             {data.description}
-            <Link to="/about" className="text-main-red hover:underline">
-              {" "}
+            <Link to="/about" className="text-main-red hover:underline ml-1">
               More...
             </Link>
           </p>
         </div>
 
-        {/* ===== DESKTOP DESCRIPTION (UNCHANGED) ===== */}
-        <div className="hidden lg:block">
-          <div className="mb-4">
-            <div className="flex gap-6 mb-4">
-              {Object.entries(data.socials || {}).map(([platform, url]: any) =>
-                url && (
-                  <Link key={platform} to={url} target="_blank">
-                    <span className="text-white text-xl hover:text-main-red transition-all">
-                      {getSocialIcon(platform)}
-                    </span>
-                  </Link>
-                )
-              )}
-            </div>
-            <p className="text-main-gray text-[16px]">
-              {data.description}
-              <Link to="/about" className="text-main-red hover:underline">
-                {" "}
-                More...
-              </Link>
-            </p>
-          </div>
-        </div>
-
-        {/* ===== DESKTOP USEFUL LINKS (BROCHURE OPENS IN NEW TAB) ===== */}
-        <div className="hidden lg:block">
+        {/* Section 2: Useful Links (Visible Everywhere Now) */}
+        <div>
           <h3 className="text-lg text-gray-200 mb-2 font-bold">
             Useful Links
           </h3>
@@ -153,8 +128,8 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* ===== DESKTOP OUR SERVICES (UNCHANGED) ===== */}
-        <div className="hidden lg:block">
+        {/* Section 3: Our Services (Visible Everywhere Now) */}
+        <div>
           <h3 className="text-lg text-gray-200 mb-2 font-bold">
             Our Services
           </h3>
@@ -169,8 +144,8 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* ===== DESKTOP GET IN TOUCH (UNCHANGED) ===== */}
-        <div className="hidden lg:block">
+        {/* Section 4: Get In Touch (Visible Everywhere Now) */}
+        <div>
           <h3 className="text-lg text-gray-200 mb-2 font-bold">
             Get In Touch
           </h3>
@@ -211,7 +186,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* ===== COPYRIGHT (UNCHANGED) ===== */}
+      {/* Copyright (Unchanged) */}
       <div className="text-center mt-4 py-4 border-t border-white/5">
         <p className="text-main-gray text-[15px]">
           {data.copyright || "© 2016 All Rights Reserved"}

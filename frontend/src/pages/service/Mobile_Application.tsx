@@ -340,7 +340,7 @@ const MobileApplication = () => {
               transition={{ delay: 0.2 }}
             >
               <img
-                src="https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/application-interface.jpg"
+                src="https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/application-interface.webp"
                 alt="Mobile App Features"
                 className="w-full h-80 rounded-lg shadow-lg transition-transform duration-500 hover:scale-105 object-cover"
                 loading="lazy"

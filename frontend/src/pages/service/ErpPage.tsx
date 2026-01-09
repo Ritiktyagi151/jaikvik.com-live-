@@ -119,7 +119,7 @@ const ErpPage: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/hand-drawn-flat-design-erp-illustration.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/hand-drawn-flat-design-erp-illustration.webp",
       alt: "ERP Solutions",
     },
     {
@@ -186,7 +186,7 @@ const ErpPage: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/enterprise-resource.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/enterprise-resource.webp",
       alt: "ERP Features",
       reverse: true,
     },
@@ -289,7 +289,7 @@ const ErpPage: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/enterprise-resource-planning-holographic-interface.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/enterprise-resource-planning-holographic-interface.webp",
       alt: "ERP Benefits",
     },
     {
@@ -528,7 +528,7 @@ const ErpPage: React.FC = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/erp-infographic.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/erp-infographic.webp",
       alt: "ERP Use Cases",
       reverse: true,
     },

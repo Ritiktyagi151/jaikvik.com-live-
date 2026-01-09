@@ -7,17 +7,15 @@ import {
 } from "react-icons/fa";
 import { useDebounce } from "use-debounce";
 
-// ✅ Environment Variables for API
 const API_BASE = import.meta.env.VITE_API_URL; 
-const MEDIA_BASE = API_BASE.replace('/api', '');
 
 interface VideoData {
   _id?: string;
   title: string;
-  url: string;
+  videoSrc: string; // Updated from 'url' to match backend
   posterSrc: string;
   label: string;
-  privacy: "public" | "private";
+  privacy: "public" | "private" | "unlisted"; // Updated options
   status: "published" | "draft" | "archived";
   description: string;
   views?: number;
@@ -34,7 +32,6 @@ const AdminCorporateVideos: React.FC = () => {
   const [currentVideo, setCurrentVideo] = useState<VideoData | null>(null);
   const [activeTab, setActiveTab] = useState<string>("all");
 
-  // ✅ FETCH VIDEOS
   const fetchVideos = useCallback(async () => {
     try {
       setLoading(true);
@@ -42,17 +39,14 @@ const AdminCorporateVideos: React.FC = () => {
       setVideos(response.data || []);
       setError(null);
     } catch (err: any) {
-      setError("Failed to fetch videos. Check backend connection.");
+      setError("Failed to fetch videos.");
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchVideos();
-  }, [fetchVideos]);
+  useEffect(() => { fetchVideos(); }, [fetchVideos]);
 
-  // ✅ SAVE / UPDATE LOGIC
   const handleSave = async (payload: VideoData) => {
     try {
       setLoading(true);
@@ -64,25 +58,21 @@ const AdminCorporateVideos: React.FC = () => {
       setIsFormOpen(false);
       fetchVideos();
     } catch (err: any) {
-      alert("Error saving video.");
+      alert("Error saving video: " + (err.response?.data?.message || "Check fields"));
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ DELETE LOGIC
   const handleDelete = async (id: string) => {
     if (window.confirm("Delete this video permanently?")) {
       try {
         await axios.delete(`${API_BASE}/corporate-videos/${id}`);
         fetchVideos();
-      } catch (err) {
-        alert("Delete failed.");
-      }
+      } catch (err) { alert("Delete failed."); }
     }
   };
 
-  // ✅ SEARCH & FILTER
   const filteredVideos = useMemo(() => {
     return videos.filter(v => {
       const matchesSearch = v.title.toLowerCase().includes(debouncedSearch.toLowerCase());
@@ -94,7 +84,6 @@ const AdminCorporateVideos: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#0f1115] text-gray-200 p-4 sm:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-black text-red-600 tracking-tighter uppercase flex items-center gap-3">
@@ -183,7 +172,7 @@ const AdminCorporateVideos: React.FC = () => {
             ))
           ) : (
             <div className="p-20 text-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 uppercase font-black tracking-widest">
-              {loading ? "Syncing with database..." : "No media found"}
+              {loading ? "Syncing..." : "No media found"}
             </div>
           )}
         </div>
@@ -201,11 +190,10 @@ const AdminCorporateVideos: React.FC = () => {
   );
 };
 
-// --- MODAL COMPONENT (BLOG STYLE) ---
 const VideoFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
   const [data, setData] = useState<VideoData>(initialData || {
     title: "",
-    url: "",
+    videoSrc: "", // Fixed field name
     posterSrc: "",
     label: "Featured",
     privacy: "public",
@@ -232,7 +220,7 @@ const VideoFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
             
             <div>
               <label className="text-[10px] font-black text-red-600 uppercase mb-1 block">Label (Badge)</label>
-              <input placeholder="Featured, New, etc." className="w-full bg-black border border-gray-800 p-3 text-white rounded-xl outline-none focus:border-red-600" value={data.label} onChange={e => setData({...data, label: e.target.value})} />
+              <input placeholder="Featured, etc." className="w-full bg-black border border-gray-800 p-3 text-white rounded-xl outline-none focus:border-red-600" value={data.label} onChange={e => setData({...data, label: e.target.value})} />
             </div>
 
             <div>
@@ -247,11 +235,11 @@ const VideoFormModal = ({ initialData, onClose, onSave, isLoading }: any) => {
 
           <div>
             <label className="text-[10px] font-black text-red-600 uppercase mb-1 block">Video MP4 URL</label>
-            <input className="w-full bg-black border border-gray-800 p-3 text-white rounded-xl outline-none focus:border-red-600" value={data.url} onChange={e => setData({...data, url: e.target.value})} />
+            <input className="w-full bg-black border border-gray-800 p-3 text-white rounded-xl outline-none focus:border-red-600" value={data.videoSrc} onChange={e => setData({...data, videoSrc: e.target.value})} />
           </div>
 
           <div>
-            <label className="text-[10px] font-black text-red-600 uppercase mb-1 block">Poster/Thumbnail URL</label>
+            <label className="text-[10px] font-black text-red-600 uppercase mb-1 block">Poster URL</label>
             <input className="w-full bg-black border border-gray-800 p-3 text-white rounded-xl outline-none focus:border-red-600" value={data.posterSrc} onChange={e => setData({...data, posterSrc: e.target.value})} />
           </div>
 

@@ -13,8 +13,8 @@ export const getVideos = async (req: Request, res: Response) => {
 export const createVideo = async (req: Request, res: Response) => {
   try {
     const video = new CorporateVideo(req.body);
-    await video.save();
-    res.status(201).json(video);
+    const savedVideo = await video.save();
+    res.status(201).json(savedVideo);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -24,9 +24,10 @@ export const updateVideo = async (req: Request, res: Response) => {
   try {
     const updatedVideo = await CorporateVideo.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true }
+      { $set: req.body }, // Explicitly set body
+      { new: true, runValidators: true }
     );
+    if (!updatedVideo) return res.status(404).json({ message: "Video not found" });
     res.status(200).json(updatedVideo);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

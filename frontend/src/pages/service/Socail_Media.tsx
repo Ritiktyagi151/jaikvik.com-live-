@@ -191,7 +191,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/SMM-Importance.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/SMM-Importance.webp",
       alt: "SMM Importance",
       reverse: true,
       sectionId: "smm-importance",
@@ -594,7 +594,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Audience-Research.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Audience-Research.webp",
       alt: "Audience Research",
       reverse: true,
       sectionId: "smm-audience",
@@ -686,7 +686,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Platform-Selection.webp",
       alt: "Platform Selection",
       sectionId: "smm-platform-selection",
     },
@@ -1122,7 +1122,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Interacting-with-Your-Audience.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Interacting-with-Your-Audience.webp",
       alt: "Audience Engagement",
       sectionId: "smm-engagement",
     },
@@ -1536,7 +1536,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/The-Future-of-Social-Media-Marketing.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/The-Future-of-Social-Media-Marketing.webp",
       alt: "Future of SMM",
       sectionId: "smm-future",
     },
@@ -1630,7 +1630,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Case-Studies-and-Success-Stories.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/Case-Studies-and-Success-Stories.webp",
       alt: "Case Studies",
       reverse: true,
       sectionId: "smm-case-studies",
@@ -1712,7 +1712,7 @@ const SocialMediaMarketing = () => {
         </>
       ),
       image:
-        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/SMM-Conclusion.jpg",
+        "https://jaikvik.in/lab/cloud/jaikvik/assets/images/pages_images/SMM-Conclusion.webp  ",
       alt: "SMM Conclusion",
       sectionId: "smm-conclusion",
     },
