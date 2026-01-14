@@ -217,7 +217,7 @@ const MobileAppSection: React.FC = () => {
           <div className="w-full lg:w-1/2 lg:pr-12 z-10 order-2 lg:order-1 mt-8 lg:mt-0">
             <div className="relative h-full flex flex-col justify-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 text-center lg:text-left">
-                MOBILE APPLICATION, Jaikvik <br />
+                MOBILE APPLICATION,<br />
                 <span
                   className={`bg-gradient-to-r ${currentFeature.gradient} bg-clip-text text-transparent`}
                 >
