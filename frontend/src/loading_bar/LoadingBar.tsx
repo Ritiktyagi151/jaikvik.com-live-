@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 interface DottedNeonProgressProps {
   duration?: number;
   size?: number;
@@ -21,16 +22,15 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
   const strokeDashoffset =
     circumference - (currentProgress / 100) * circumference;
 
-  // Style configuration - exactly as original
+  // Name updated to "LOADER" here
   const styleConfig = {
     dashArray: "8,4,2,4,8,15",
     glowColor: "#fca5a5",
     animation: "animate-pulse",
-    name: "Jaikvik Technology India Private Limited",
+    name: "LOADER", 
   };
 
   useEffect(() => {
-    // Auto-start the animation exactly as original
     setIsAnimating(true);
     setCurrentProgress(0);
 
@@ -48,7 +48,6 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
     return () => clearInterval(interval);
   }, [duration]);
 
-  // Continuous rotation animation - unchanged
   useEffect(() => {
     const rotationInterval = setInterval(() => {
       setRotationOffset((prev) => (prev + 1) % 360);
@@ -58,7 +57,7 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8 relative overflow-hidden">
-      {/* Animated background grid - unchanged */}
+      {/* Background Grid */}
       <div className="absolute inset-0 opacity-10">
         <div
           className="absolute inset-0"
@@ -70,7 +69,7 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
         />
       </div>
 
-      {/* Dynamic background glow - unchanged */}
+      {/* Glow Effect */}
       <div
         className="absolute inset-0 transition-all duration-1000"
         style={{
@@ -79,16 +78,16 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
         }}
       />
 
+      {/* Displaying the Name "LOADER" */}
       <div className="relative z-10 text-center mb-8">
-        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-red-600 mb-2">
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-red-600 mb-2 tracking-widest">
           {styleConfig.name.toUpperCase()}
         </h1>
       </div>
 
-      {/* Main Dotted Neon Progress Ring - completely unchanged */}
       <div className="relative">
         <div className="relative">
-          {/* Outer particle ring - unchanged */}
+          {/* Outer Particle Ring */}
           <svg
             width={size + 40}
             height={size + 40}
@@ -116,7 +115,7 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
             })}
           </svg>
 
-          {/* Main progress SVG - unchanged */}
+          {/* Progress Ring */}
           <svg
             width={size}
             height={size}
@@ -125,7 +124,6 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
               filter: `drop-shadow(0 0 20px ${styleConfig.glowColor}) drop-shadow(0 0 40px ${styleConfig.glowColor}80) drop-shadow(0 0 60px ${styleConfig.glowColor}40)`,
             }}
           >
-            {/* Background dotted track - unchanged */}
             <circle
               cx={size / 2}
               cy={size / 2}
@@ -137,19 +135,6 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
               className="opacity-30"
             />
 
-            {/* Inner shadow track - unchanged */}
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius - 5}
-              stroke="rgba(0, 0, 0, 0.8)"
-              strokeWidth={strokeWidth - 4}
-              fill="transparent"
-              strokeDasharray="2,4"
-              className="opacity-50"
-            />
-
-            {/* Main dotted progress circle - unchanged */}
             <circle
               cx={size / 2}
               cy={size / 2}
@@ -163,142 +148,36 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
               className="transition-all duration-300 ease-out"
             />
 
-            {/* Animated highlight overlay - unchanged */}
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              stroke="url(#highlightGradient)"
-              strokeWidth={strokeWidth / 3}
-              fill="transparent"
-              strokeDasharray={`${
-                parseFloat(styleConfig.dashArray.split(",")[0]) * 0.8
-              },${parseFloat(styleConfig.dashArray.split(",")[1]) * 1.2}`}
-              strokeDashoffset={strokeDashoffset - 10}
-              strokeLinecap="round"
-              className={`transition-all duration-300 ease-out ${styleConfig.animation}`}
-              style={{ animationDuration: "1.5s" }}
-            />
-
-            {/* Progress end glow dot - unchanged */}
-            <circle
-              cx={
-                size / 2 +
-                radius * Math.cos((currentProgress / 100) * 2 * Math.PI)
-              }
-              cy={
-                size / 2 +
-                radius * Math.sin((currentProgress / 100) * 2 * Math.PI)
-              }
-              r="6"
-              fill={styleConfig.glowColor}
-              className="animate-pulse"
-              style={{
-                filter: `drop-shadow(0 0 10px ${styleConfig.glowColor}) drop-shadow(0 0 20px ${styleConfig.glowColor}80)`,
-              }}
-            />
-
-            {/* Gradient definitions - unchanged */}
             <defs>
-              <linearGradient
-                id="dottedGradient"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#dc2626">
-                  <animate
-                    attributeName="stop-color"
-                    values="#dc2626;#ef4444;#f87171;#dc2626"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </stop>
-                <stop offset="50%" stopColor="#ef4444">
-                  <animate
-                    attributeName="stop-color"
-                    values="#ef4444;#f87171;#fca5a5;#ef4444"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </stop>
-                <stop offset="100%" stopColor="#f87171">
-                  <animate
-                    attributeName="stop-color"
-                    values="#f87171;#fca5a5;#fed7d7;#f87171"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </stop>
+              <linearGradient id="dottedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#dc2626" />
+                <stop offset="50%" stopColor="#ef4444" />
+                <stop offset="100%" stopColor="#f87171" />
               </linearGradient>
-
-              <radialGradient id="highlightGradient">
-                <stop offset="0%" stopColor="rgba(255, 255, 255, 0.9)" />
-                <stop offset="70%" stopColor="rgba(255, 255, 255, 0.3)" />
-                <stop offset="100%" stopColor="rgba(255, 255, 255, 0)" />
-              </radialGradient>
             </defs>
           </svg>
 
-          {/* Center content with enhanced glow - unchanged */}
+          {/* Center Text */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               {showPercentage && (
                 <>
                   <div
-                    className="text-5xl font-bold text-red-400 mb-2 transition-all duration-300 tabular-nums"
+                    className="text-5xl font-bold text-red-400 mb-2 tabular-nums"
                     style={{
-                      textShadow: `0 0 20px ${styleConfig.glowColor}, 0 0 40px ${styleConfig.glowColor}80, 0 0 60px ${styleConfig.glowColor}40`,
+                      textShadow: `0 0 20px ${styleConfig.glowColor}`,
                       fontFamily: "monospace",
                     }}
                   >
                     {Math.round(currentProgress)}%
                   </div>
-                  <div
-                    className="text-red-300 text-sm font-semibold tracking-[0.2em] uppercase"
-                    style={{
-                      textShadow: `0 0 10px ${styleConfig.glowColor}60`,
-                    }}
-                  >
-                    {isAnimating
-                      ? "●●● LOADING ●●●"
-                      : currentProgress === 100
-                      ? "★ COMPLETE ★"
-                      : "○○○ READY ○○○"}
+                  <div className="text-red-300 text-sm font-semibold tracking-[0.2em] uppercase">
+                    {isAnimating ? "● LOADING ●" : "★ COMPLETE ★"}
                   </div>
                 </>
               )}
             </div>
           </div>
-        </div>
-
-        {/* Floating progress indicators - unchanged */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(8)].map((_, i) => {
-            const angle = i * 45 * (Math.PI / 180);
-            const distance = radius + 40;
-            const x = size / 2 + distance * Math.cos(angle) - 4;
-            const y = size / 2 + distance * Math.sin(angle) - 4;
-            const isActive = (currentProgress / 100) * 8 > i;
-
-            return (
-              <div
-                key={i}
-                className={`absolute w-2 h-2 rounded-full transition-all duration-500 ${
-                  isActive ? "bg-red-400 animate-pulse" : "bg-gray-600"
-                }`}
-                style={{
-                  left: `${x}px`,
-                  top: `${y}px`,
-                  boxShadow: isActive
-                    ? `0 0 10px ${styleConfig.glowColor}`
-                    : "none",
-                  animationDelay: `${i * 0.1}s`,
-                }}
-              />
-            );
-          })}
         </div>
       </div>
 
@@ -312,15 +191,4 @@ const DottedNeonProgress: React.FC<DottedNeonProgressProps> = ({
   );
 };
 
-const App: React.FC = () => {
-  return (
-    <DottedNeonProgress
-      duration={10000}
-      showPercentage={true}
-      size={320}
-      strokeWidth={10}
-    />
-  );
-};
-
-export default App;
+export default DottedNeonProgress;

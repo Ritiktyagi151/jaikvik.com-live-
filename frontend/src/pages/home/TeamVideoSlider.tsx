@@ -3,12 +3,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 import { X, ArrowLeft as BackIcon } from "lucide-react";
-import axios from "axios"; // Axios import kiya
+import axios from "axios"; 
 import ArrowLeft from "../../components/arrows/ArrowLeft";
 import ArrowRight from "../../components/arrows/ArrowRight";
 import ReelVideoCard from "../../components/cards/ReelVideoCard";
 
-// ✅ API configuration environment variable se
+// API configuration
 const API_URL = `${import.meta.env.VITE_API_URL}/team-videos`;
 
 const TeamVideoSlider = () => {
@@ -18,21 +18,18 @@ const TeamVideoSlider = () => {
     poster: string;
   } | null>(null);
 
-  // ✅ States for API Data
   const [teamVideosList, setTeamVideosList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch Data logic
   useEffect(() => {
     const fetchTeamVideos = async () => {
       try {
         setLoading(true);
         const response = await axios.get(API_URL);
-        // Checking for success property as per your backend standard
         if (response.data.success) {
           setTeamVideosList(response.data.data);
         } else {
-          setTeamVideosList(response.data); // Fallback if direct array
+          setTeamVideosList(response.data); 
         }
       } catch (error) {
         console.error("Team videos fetch failed", error);
@@ -53,10 +50,13 @@ const TeamVideoSlider = () => {
     }
   };
 
-  // Loading indicator (optional, keeps UI clean)
   if (loading && teamVideosList.length === 0) {
     return <div className="h-40 flex items-center justify-center text-white animate-pulse">Loading Team Videos...</div>;
   }
+
+  // FIXED: Loop logic updated to prevent Swiper Warning
+  // Swiper needs at least (slidesPerView * 2) slides to loop properly without warnings.
+  const isLoopable = teamVideosList.length >= 8; 
 
   return (
     <div className="overflow-hidden h-auto my-4">
@@ -68,7 +68,6 @@ const TeamVideoSlider = () => {
         </h2>
       </div>
 
-      {/* Swiper */}
       <div className="w-full group relative">
         <Swiper
           modules={[Navigation, Autoplay]}
@@ -78,7 +77,8 @@ const TeamVideoSlider = () => {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
-          loop={teamVideosList.length > 4} // Loop tabhi jab sufficient items hon
+          // FIXED: Use condition to avoid "enough slides" warning
+          loop={isLoopable} 
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -88,10 +88,10 @@ const TeamVideoSlider = () => {
           }}
           className="mySwiper !overflow-visible"
           breakpoints={{
-            320: { slidesPerView: 1.2 },
-            640: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.5 },
-            1280: { slidesPerView: 4.5 },
+            320: { slidesPerView: 1.2, loop: teamVideosList.length > 2 },
+            640: { slidesPerView: 2.5, loop: teamVideosList.length > 4 },
+            1024: { slidesPerView: 3.5, loop: teamVideosList.length > 6 },
+            1280: { slidesPerView: 4.5, loop: isLoopable },
           }}
         >
           {teamVideosList.map((item, index) => (
@@ -120,7 +120,6 @@ const TeamVideoSlider = () => {
         <ArrowRight onClick={() => swiperRef.current?.slideNext()} />
       </div>
 
-      {/* Fullscreen Overlay for Mobile */}
       {selectedVideo && (
         <div className="fixed inset-0 z-[9999] bg-black bg-opacity-95 flex items-center justify-center">
           <button
@@ -150,4 +149,4 @@ const TeamVideoSlider = () => {
   );
 };
 
-export default TeamVideoSlider; 
+export default TeamVideoSlider;

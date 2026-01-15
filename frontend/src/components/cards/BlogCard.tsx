@@ -6,33 +6,34 @@ import type { blogInterface } from "../../interfaces/blogInterface";
 const BlogCard: React.FC<blogInterface> = ({
   category = "",
   author = "",
-  createdAt, // Backend se 'date' ki jagah 'createdAt' aata hai
+  createdAt, 
   title = "",
   summary = "",
   image = "",
   description = "",
-  slug = "", // Slug logic ke liye important hai
+  slug = "", 
 }) => {
   const navigate = useNavigate();
 
-  // URL ko ID ki jagah Slug par navigate karne ke liye logic
   const handleReadMore = () => {
     navigate(`/blog/${slug}`); 
   };
 
-  // Date format karne ke liye helper
   const displayDate = createdAt ? new Date(createdAt).toLocaleDateString() : "";
 
   return (
     <div className="w-full rounded-lg group p-3 gap-2 flex flex-col justify-start items-start bg-main-secondary/80">
       <div className="w-full overflow-hidden rounded-lg">
         <img
-          // IMAGE LOGIC: Backend path ke saath localhost domain add kiya
-          src={`http://localhost:5000${image}`}
+          // Port 5002 update kiya aur logic wahi rakha
+          src={`http://localhost:5002${image}`}
           alt={title}
           className="group-hover:scale-110 transition-all duration-300 h-[160px] w-full object-cover"
           onError={(e) => {
-             (e.target as HTMLImageElement).src = "https://via.placeholder.com/300x120?text=No+Image";
+            const target = e.target as HTMLImageElement;
+            // Loop rokne ke liye ye zaroori hai
+            target.onerror = null; 
+            target.src = "https://via.placeholder.com/300x120?text=No+Image";
           }}
         />
       </div>
