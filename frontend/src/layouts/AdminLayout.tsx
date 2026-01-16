@@ -54,30 +54,25 @@ const AdminLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Yahan Maine Paths Update Kiye Hain (Dashboard Add Kiya Hai)
   const menuItems: MenuItem[] = [
     {
       id: "dashboard",
       label: "Dashboard",
       icon: <LayoutDashboard size={20} />,
-      href: "/admin",
+      href: "/admin/dashboard",
     },
     {
       id: "website-sections",
       label: "Website Sections",
       icon: <List size={20} />,
-      href: "/admin/website-sections",
+      href: "/admin/dashboard/website-sections",
       children: [
-        // {
-        //   id: "navbar",
-        //   label: "Navbar",
-        //   icon: <Navigation size={18} />,
-        //   href: "/admin/website-sections/navbar",
-        // },
         {
           id: "footer",
           label: "Footer",
           icon: <Footprints size={18} />,
-          href: "/admin/website-sections/footer",
+          href: "/admin/dashboard/website-sections/footer",
         },
       ],
     },
@@ -85,84 +80,72 @@ const AdminLayout: React.FC = () => {
       id: "home",
       label: "Home Page",
       icon: <Home size={20} />,
-      href: "/admin/home",
+      href: "/admin/dashboard/home",
       children: [
-        // {
-        //   id: "hero-section",
-        //   label: "Hero Section",
-        //   href: "/admin/home/hero-section",
-        //   icon: <Image size={18} />,
-        // },
         {
           id: "banners",
           label: "Banners",
-          href: "/admin/home/banners",
+          href: "/admin/dashboard/home/banners",
           icon: <Image size={18} />,
         },
         {
           id: "corporate-video",
           label: "Corporate Video",
-          href: "/admin/home/corporate-video",
+          href: "/admin/dashboard/home/corporate-video",
           icon: <Film size={18} />,
         },
         {
           id: "services-section",
           label: "Services Section",
-          href: "/admin/home/services-section",
+          href: "/admin/dashboard/home/services-section",
           icon: <Settings size={18} />,
         },
-        // {
-        //   id: "enquiry-section",
-        //   label: "Enquiry Section",
-        //   href: "/admin/home/enquiry-section",
-        //   icon: <Mail size={18} />,
-        // },
         {
           id: "reels",
           label: "Reels",
-          href: "/admin/home/reels",
+          href: "/admin/dashboard/home/reels",
           icon: <Film size={18} />,
         },
         {
           id: "video",
           label: "Video",
-          href: "/admin/home/video",
+          href: "/admin/dashboard/home/video",
           icon: <Film size={18} />,
         },
         {
           id: "testimonial-video",
           label: "Testimonial Video",
-          href: "/admin/home/testimonial-video",
+          href: "/admin/dashboard/home/testimonial-video",
           icon: <Film size={18} />,
         },
         {
           id: "website",
           label: "Website",
-          href: "/admin/home/website",
+          href: "/admin/dashboard/home/website",
           icon: <Image size={18} />,
         },
         {
           id: "social-media-post",
           label: "Social Media Post",
-          href: "/admin/home/social-media-post",
+          href: "/admin/dashboard/home/social-media-post",
           icon: <Image size={18} />,
         },
         {
           id: "our-team",
           label: "Our Team",
-          href: "/admin/home/our-team",
+          href: "/admin/dashboard/home/our-team",
           icon: <Users size={18} />,
         },
         {
           id: "tech",
           label: "Tecnology",
-          href: "/admin/home/tech",
+          href: "/admin/dashboard/home/tech",
           icon: <Users size={18} />,
         },
         {
           id: "our-clients",
           label: "Our Clients",
-          href: "/admin/home/our-clients",
+          href: "/admin/dashboard/home/our-clients",
           icon: <Users size={18} />,
         },
       ],
@@ -171,98 +154,26 @@ const AdminLayout: React.FC = () => {
       id: "about-us",
       label: "About Us",
       icon: <Users size={20} />,
-      href: "/admin/about-us",
+      href: "/admin/dashboard/about-us",
     },
     {
       id: "blogs",
       label: "Blogs",
       icon: <FileText size={20} />,
-      href: "/admin/blogs",
+      href: "/admin/dashboard/blogs",
     },
     {
       id: "careers",
       label: "Careers",
       icon: <BarChart3 size={20} />,
-      href: "/admin/careers",
+      href: "/admin/dashboard/careers",
     },
     {
       id: "contact-us",
       label: "Contact Us",
       icon: <MessageSquare size={20} />,
-      href: "/admin/contact-us",
+      href: "/admin/dashboard/contact-us",
     },
-    // {
-    //   id: "services",
-    //   label: "Services",
-    //   icon: <Settings size={20} />,
-    //   href: "/admin/services",
-    //   children: [
-    //     {
-    //       id: "software-development",
-    //       label: "Software Development",
-    //       href: "/admin/services/software-development",
-    //       children: [
-    //         {
-    //           id: "crm-software",
-    //           label: "CRM Software",
-    //           href: "/admin/services/software-development/crm-software",
-    //         },
-    //         {
-    //           id: "mobile-application",
-    //           label: "Mobile Application",
-    //           href: "/admin/services/software-development/mobile-application",
-    //         },
-    //         {
-    //           id: "erp-software",
-    //           label: "ERP Software",
-    //           href: "/admin/services/software-development/erp-software",
-    //         },
-    //         {
-    //           id: "customization-software",
-    //           label: "Customization Software",
-    //           href: "/admin/services/software-development/customization-software",
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       id: "web-development",
-    //       label: "Web Development",
-    //       href: "/admin/services/web-development",
-    //     },
-    //     {
-    //       id: "digital-marketing",
-    //       label: "Digital Marketing",
-    //       href: "/admin/services/digital-marketing",
-    //       children: [
-    //         {
-    //           id: "social-media-marketing",
-    //           label: "Social Media Marketing",
-    //           href: "/admin/services/digital-marketing/social-media-marketing",
-    //         },
-    //         {
-    //           id: "youtube-meta-ads",
-    //           label: "YouTube and Meta Ads",
-    //           href: "/admin/services/digital-marketing/youtube-meta-ads",
-    //         },
-    //         {
-    //           id: "brand-promotion",
-    //           label: "Brand Promotion",
-    //           href: "/admin/services/digital-marketing/brand-promotion",
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       id: "google-seo-services",
-    //       label: "Google SEO Services",
-    //       href: "/admin/services/google-seo-services",
-    //     },
-    //     {
-    //       id: "film-production",
-    //       label: "Film Production",
-    //       href: "/admin/services/film-production",
-    //     },
-    //   ],
-    // },
   ];
 
   const notifications: Notification[] = [
@@ -370,23 +281,19 @@ const AdminLayout: React.FC = () => {
         },
       });
 
-      // Clear client-side storage regardless of API response
       localStorage.removeItem("authToken");
       sessionStorage.removeItem("authToken");
       localStorage.removeItem("userData");
       sessionStorage.removeItem("userData");
 
       if (response.ok) {
-        // Redirect to home page
         navigate("/");
       } else {
         console.error("Logout failed");
-        // Still redirect even if API call fails
         navigate("/admin");
       }
     } catch (error) {
       console.error("Logout error:", error);
-      // Clear storage and redirect on error too
       localStorage.removeItem("authToken");
       sessionStorage.removeItem("authToken");
       localStorage.removeItem("userData");
@@ -411,7 +318,6 @@ const AdminLayout: React.FC = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
       setNotificationsOpen(false);
@@ -424,7 +330,6 @@ const AdminLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-black text-gray-100 font-sans">
-      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/80 z-40 lg:hidden"
@@ -432,7 +337,6 @@ const AdminLayout: React.FC = () => {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 bg-black shadow-2xl border-r border-red-900/50 transition-all duration-300 ease-in-out ${sidebarOpen ? "w-64" : "w-16"
           } ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -573,36 +477,9 @@ const AdminLayout: React.FC = () => {
             ))}
           </ul>
         </nav>
-
-        {/* User Profile in Sidebar */}
-        {/* <div
-          className={`absolute bottom-0 left-0 right-0 p-2 ${sidebarOpen ? "px-4" : "px-2"
-            }`}
-        >
-          <div
-            className={`flex items-center space-x-3 p-3 bg-red-900/50 rounded-lg ${sidebarOpen ? "justify-start" : "justify-center"
-              }`}
-          >
-            <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center border border-red-500">
-              <User size={20} className="text-white" />
-            </div>
-            {sidebarOpen && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-red-400 truncate">
-                  Admin User
-                </p>
-                <p className="text-xs text-gray-400 truncate">
-                  admin@example.com
-                </p>
-              </div>
-            )}
-          </div>
-        </div> */}
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col shadow-2xl overflow-hidden">
-        {/* Top Navigation */}
         <header className="bg-white">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center space-x-4">
@@ -613,7 +490,6 @@ const AdminLayout: React.FC = () => {
                 <Menu size={24} />
               </button>
 
-              {/* Search Bar */}
               <div className="relative">
                 <Search
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
@@ -630,18 +506,15 @@ const AdminLayout: React.FC = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Quick Action Button */}
               <button className="hidden md:flex items-center space-x-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200">
                 <Plus size={16} />
                 <span>New Content</span>
               </button>
 
-              {/* Help Button */}
               <button className="p-2 text-gray-600 hover:text-red-400  transition-colors duration-200">
                 <HelpCircle size={22} />
               </button>
 
-              {/* Notifications */}
               <div className="relative">
                 <button
                   onClick={(e) => {
@@ -658,7 +531,6 @@ const AdminLayout: React.FC = () => {
                   )}
                 </button>
 
-                {/* Notifications Dropdown */}
                 {notificationsOpen && (
                   <div className="absolute right-0 mt-2 w-80 bg-black rounded-lg shadow-xl border border-red-900 z-50">
                     <div className="p-4 border-b border-red-900 flex justify-between items-center">
@@ -703,7 +575,7 @@ const AdminLayout: React.FC = () => {
                     <div className="p-4 border-t border-red-900">
                       <button
                         onClick={() => {
-                          navigate("/admin/notifications");
+                          navigate("/admin/dashboard/notifications");
                           setNotificationsOpen(false);
                         }}
                         className="w-full py-2 text-red-400 hover:text-red-300 text-sm font-medium flex items-center justify-center transition-colors duration-200"
@@ -716,7 +588,6 @@ const AdminLayout: React.FC = () => {
                 )}
               </div>
 
-              {/* Profile Dropdown */}
               <div className="relative">
                 <button
                   onClick={(e) => {
@@ -735,7 +606,6 @@ const AdminLayout: React.FC = () => {
                   />
                 </button>
 
-                {/* Profile Dropdown */}
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-black rounded-lg shadow-xl border border-red-900 z-50">
                     <div className="p-2">
@@ -747,14 +617,14 @@ const AdminLayout: React.FC = () => {
                       </div>
                       <hr className="my-1 border-red-900" />
                       <NavLink
-                        to="/admin/profile"
+                        to="/admin/dashboard/profile"
                         className="block px-4 py-2 text-sm text-gray-300 hover:bg-red-900/20 hover:text-red-400 rounded"
                         onClick={() => setProfileOpen(false)}
                       >
                         Your Profile
                       </NavLink>
                       <NavLink
-                        to="/admin/settings"
+                        to="/admin/dashboard/settings"
                         className="block px-4 py-2 text-sm text-gray-300 hover:bg-red-900/20 hover:text-red-400 rounded"
                         onClick={() => setProfileOpen(false)}
                       >
@@ -777,14 +647,12 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
           <div className="max-w-7xl mx-auto">
-            {/* Dynamic Page Title */}
             <div className="mb-6 flex justify-between items-center">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
-                  {location.pathname === "/admin"
+                  {location.pathname === "/admin/dashboard"
                     ? "Dashboard"
                     : menuItems
                       .flatMap((item) => [item, ...(item.children || [])])
@@ -793,7 +661,7 @@ const AdminLayout: React.FC = () => {
                       ?.label || "Dashboard"}
                 </h1>
                 <p className="text-gray-500 mt-1 capitalize">
-                  {location.pathname === "/admin"
+                  {location.pathname === "/admin/dashboard"
                     ? "Overview of your admin dashboard"
                     : `Manage your ${location.pathname
                       .split("/")
@@ -813,7 +681,6 @@ const AdminLayout: React.FC = () => {
               </div>
             </div>
 
-            {/* Page Content */}
             <div className="bg-white border border-gray-400/30 rounded-xl p-6">
               <Outlet />
             </div>
@@ -821,7 +688,6 @@ const AdminLayout: React.FC = () => {
         </main>
       </div>
 
-      {/* Click outside handlers */}
       {notificationsOpen && (
         <div
           className="fixed inset-0 z-40"
