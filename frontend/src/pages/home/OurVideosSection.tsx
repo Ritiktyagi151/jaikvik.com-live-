@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
@@ -24,24 +24,26 @@ const OurVideosSection = () => {
 
   // ✅ Fetch Videos from API
   useEffect(() => {
+    let isMounted = true;
     const fetchVideos = async () => {
       try {
         setLoading(true);
         const response = await axios.get(`${API_URL}/videos`);
-        if (response.data.success) {
+        if (isMounted && response.data.success) {
           setVideoList(response.data.data);
         }
       } catch (error) {
         console.error("Failed to fetch videos", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchVideos();
+    return () => { isMounted = false; };
   }, []);
 
   const handleVideoHover = (value: boolean) => {
-    if (swiperRef.current) {
+    if (swiperRef.current?.autoplay) {
       if (value) {
         swiperRef.current.autoplay.stop();
       } else {
@@ -50,7 +52,6 @@ const OurVideosSection = () => {
     }
   };
 
-  // Jab tak data load ho raha ho, empty return ya loader dikha sakte hain
   if (loading && videoList.length === 0) return null;
 
   return (
@@ -69,6 +70,8 @@ const OurVideosSection = () => {
           modules={[Navigation, Autoplay]}
           spaceBetween={10}
           slidesPerView={4.5}
+          // Performance Fix: watchSlidesProgress se sirf visible slides render hongi
+          watchSlidesProgress={true}
           breakpoints={{
             320: { slidesPerView: 1.2, spaceBetween: 8 },
             480: { slidesPerView: 1.3, spaceBetween: 8 },
@@ -82,20 +85,18 @@ const OurVideosSection = () => {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
-          loop={videoList.length > 5} // ✅ Loop tabhi chale jab data ho
+          loop={videoList.length > 5}
           autoplay={{
-            delay: 1000,
+            delay: 3000, // Speed Fix: 1000ms se badha kar 3000ms kiya taaki smooth chale
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
-            waitForTransition: true,
           }}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
-          speed={600}
+          speed={800} // Smoothness Fix
           className="mySwiper !overflow-visible"
         >
-          {/* ✅ Using videoList from API instead of static config */}
           {videoList.map((item) => (
             <SwiperSlide
               key={item._id}
@@ -130,7 +131,7 @@ const OurVideosSection = () => {
         <div className="fixed inset-0 z-[9999] bg-black bg-opacity-95 flex items-center justify-center">
           <button
             className="absolute top-4 left-4 text-white p-2 rounded-full bg-black/40"
-            onClick={() => (window.location.href = "/")} 
+            onClick={() => setSelectedVideo(null)} 
           >
             <BackIcon size={24} />
           </button>
@@ -155,4 +156,4 @@ const OurVideosSection = () => {
   );
 };
 
-export default OurVideosSection;
+export default memo(OurVideosSection);

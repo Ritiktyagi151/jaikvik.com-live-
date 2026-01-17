@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo } from "react"; // memo add kiya
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -22,26 +22,30 @@ const TeamVideoSlider = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // Memory leak bachane ke liye
     const fetchTeamVideos = async () => {
       try {
         setLoading(true);
         const response = await axios.get(API_URL);
-        if (response.data.success) {
-          setTeamVideosList(response.data.data);
-        } else {
-          setTeamVideosList(response.data); 
+        if (isMounted) {
+          if (response.data.success) {
+            setTeamVideosList(response.data.data);
+          } else {
+            setTeamVideosList(response.data); 
+          }
         }
       } catch (error) {
         console.error("Team videos fetch failed", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchTeamVideos();
+    return () => { isMounted = false; };
   }, []);
 
   const handleVideoHover = (value: boolean) => {
-    if (swiperRef.current) {
+    if (swiperRef.current?.autoplay) {
       if (value) {
         swiperRef.current.autoplay.stop();
       } else {
@@ -51,11 +55,9 @@ const TeamVideoSlider = () => {
   };
 
   if (loading && teamVideosList.length === 0) {
-    return <div className="h-40 flex items-center justify-center text-white animate-pulse">Loading Team Videos...</div>;
+    return <div className="h-40 flex items-center justify-center text-white animate-pulse text-sm">Loading Team Videos...</div>;
   }
 
-  // FIXED: Loop logic updated to prevent Swiper Warning
-  // Swiper needs at least (slidesPerView * 2) slides to loop properly without warnings.
   const isLoopable = teamVideosList.length >= 8; 
 
   return (
@@ -73,19 +75,21 @@ const TeamVideoSlider = () => {
           modules={[Navigation, Autoplay]}
           spaceBetween={10}
           slidesPerView={4.5}
+          // Performance Fix: Sirf visible slides ki calculation hogi
+          watchSlidesProgress={true}
           navigation={{
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
-          // FIXED: Use condition to avoid "enough slides" warning
           loop={isLoopable} 
           autoplay={{
-            delay: 3000,
+            delay: 4000, // Speed Fix: 3000ms se 4000ms kiya taaki CPU par load kam pade
             disableOnInteraction: false,
           }}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
+          speed={800} // Smoothness optimization
           className="mySwiper !overflow-visible"
           breakpoints={{
             320: { slidesPerView: 1.2, loop: teamVideosList.length > 2 },
@@ -95,7 +99,7 @@ const TeamVideoSlider = () => {
           }}
         >
           {teamVideosList.map((item, index) => (
-            <SwiperSlide key={item._id || index} className="hover:z-50">
+            <SwiperSlide key={item._id || index} className="hover:z-50 !overflow-visible">
               <div
                 className="cursor-pointer"
                 onClick={() => {
@@ -120,8 +124,9 @@ const TeamVideoSlider = () => {
         <ArrowRight onClick={() => swiperRef.current?.slideNext()} />
       </div>
 
+      {/* Fullscreen Video Overlay */}
       {selectedVideo && (
-        <div className="fixed inset-0 z-[9999] bg-black bg-opacity-95 flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999] bg-black bg-opacity-95 flex items-center justify-center p-4">
           <button
             className="absolute top-4 left-4 text-white p-2 rounded-full bg-black/40"
             onClick={() => setSelectedVideo(null)}
@@ -141,7 +146,7 @@ const TeamVideoSlider = () => {
             poster={selectedVideo.poster}
             controls
             autoPlay
-            className="max-w-full max-h-[90vh] rounded-lg"
+            className="max-w-full max-h-[90vh] rounded-lg shadow-2xl"
           />
         </div>
       )}
@@ -149,4 +154,5 @@ const TeamVideoSlider = () => {
   );
 };
 
-export default TeamVideoSlider;
+// Exporting with memo to prevent unnecessary re-renders
+export default memo(TeamVideoSlider);
