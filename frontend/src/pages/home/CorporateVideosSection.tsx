@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { X, ArrowLeft as BackArrow } from "lucide-react";
-import axios from "axios"; // Axios import karein
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
+// Lucide-React icons use kar rahe hain jo bundle size kam rakhte hain
+import { Play, Pause, Volume2, VolumeX, X, ArrowLeft as BackArrow } from "lucide-react"; 
+import axios from "axios";
 
-// API Base URL (Apne backend ke hisaab se change karein)
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 interface VideoItemProps {
@@ -14,7 +13,7 @@ interface VideoItemProps {
   description: string;
 }
 
-const VideoItem: React.FC<VideoItemProps> = ({
+const VideoItem: React.FC<VideoItemProps> = memo(({
   label,
   videoSrc,
   posterSrc,
@@ -27,7 +26,6 @@ const VideoItem: React.FC<VideoItemProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
   const [showPoster, setShowPoster] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -35,22 +33,18 @@ const VideoItem: React.FC<VideoItemProps> = ({
     if (!videoRef.current) return;
     try {
       setShowPoster(false);
-      setIsLoading(true);
       await videoRef.current.play();
-      setIsLoading(false);
       setIsPlaying(true);
     } catch (error) {
       videoRef.current.muted = true;
       setIsMuted(true);
       await videoRef.current.play();
-      setIsLoading(false);
       setIsPlaying(true);
     }
   }, []);
 
   const handlePause = useCallback(() => {
-    if (!videoRef.current) return;
-    videoRef.current.pause();
+    videoRef.current?.pause();
     setIsPlaying(false);
   }, []);
 
@@ -58,32 +52,9 @@ const VideoItem: React.FC<VideoItemProps> = ({
     if (!videoRef.current) return;
     videoRef.current.pause();
     videoRef.current.currentTime = 0;
-    videoRef.current.muted = true;
-    setIsMuted(true);
     setIsPlaying(false);
     setShowPoster(true);
   }, []);
-
-  const togglePlayPause = useCallback(() => {
-    isPlaying ? handlePause() : handlePlay();
-  }, [isPlaying, handlePlay, handlePause]);
-
-  const toggleMute = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsMuted(videoRef.current.muted);
-  }, []);
-
-  const handleMouseEnter = useCallback(() => {
-    if (isMobile || isPlaying) return;
-    handlePlay();
-  }, [isMobile, isPlaying, handlePlay]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (isMobile || isPlaying) return;
-    handleResetVideo();
-  }, [isMobile, isPlaying, handleResetVideo]);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -96,151 +67,90 @@ const VideoItem: React.FC<VideoItemProps> = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
-        if (!entry.isIntersecting) {
-          handleResetVideo();
-        }
+        if (!entry.isIntersecting) handleResetVideo();
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
-    const currentContainer = containerRef.current;
-    if (currentContainer) observer.observe(currentContainer);
-    return () => {
-      if (currentContainer) observer.unobserve(currentContainer);
-    };
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, [handleResetVideo]);
-
-  useEffect(() => {
-    if (!isInView) {
-      handleResetVideo();
-    }
-  }, [isInView, handleResetVideo]);
 
   return (
     <>
       <div ref={containerRef} className="w-full flex justify-center px-4">
         <div
-          className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black group cursor-pointer transition-all duration-300"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onClick={() => {
-            if (isMobile) {
-              setIsFullscreen(true);
-            } else {
-              togglePlayPause();
-            }
-          }}
+          className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black group cursor-pointer"
+          onClick={() => isMobile ? setIsFullscreen(true) : (isPlaying ? handlePause() : handlePlay())}
         >
           <span className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase z-10">
             {label}
           </span>
 
-          {isInView && (
-            <>
-              <video
-                ref={videoRef}
-                className={`absolute inset-0 w-full h-full object-cover z-[2] transition-opacity duration-300 ${
-                  showPoster ? "opacity-0" : "opacity-100"
-                }`}
-                loop
-                playsInline
-                muted={isMuted}
-                preload="auto"
-                controls={false}
-                poster={posterSrc}
-              >
-                <source src={videoSrc} type="video/mp4" />
-              </video>
-
-              {showPoster && (
-                <img
-                  src={posterSrc}
-                  alt={title}
-                  className="absolute inset-0 w-full h-full object-cover z-[1]"
-                  loading="lazy"
-                />
-              )}
-            </>
+          {isInView ? (
+            <video
+              ref={videoRef}
+              className={`absolute inset-0 w-full h-full object-cover z-[2] transition-opacity duration-300 ${showPoster ? "opacity-0" : "opacity-100"}`}
+              loop
+              playsInline
+              muted={isMuted}
+              preload="none" 
+              poster={posterSrc}
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+          ) : (
+             <img src={posterSrc} className="absolute inset-0 w-full h-full object-cover" alt={title} />
           )}
 
-          {isLoading && !showPoster && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-[4]">
-              <div className="animate-pulse text-white">Loading...</div>
-            </div>
+          {showPoster && (
+            <img src={posterSrc} alt={title} className="absolute inset-0 w-full h-full object-cover z-[1]" loading="lazy" />
           )}
 
-          {(!isPlaying || isMobile || showPoster) && !isLoading && (
+          {(!isPlaying || isMobile) && (
             <div className="absolute inset-0 flex items-center justify-center z-[3]">
               <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center transition-transform hover:scale-110">
-                {isPlaying ? (
-                  <FaPause className="text-white text-2xl" />
-                ) : (
-                  <FaPlay className="text-white text-2xl ml-1" />
-                )}
+                {/* Font-Awesome icons ko Lucide se replace kiya gaya hai speed ke liye */}
+                {isPlaying ? <Pause className="text-white" size={32} /> : <Play className="text-white ml-1" size={32} />}
               </div>
             </div>
           )}
 
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white z-[3]">
             <h3 className="text-xl font-bold mb-2">{title}</h3>
-            <p className="text-sm opacity-90">{description}</p>
+            <p className="text-sm opacity-90 line-clamp-2">{description}</p>
           </div>
 
           {!isMobile && !showPoster && (
             <button
               className="absolute bottom-4 right-4 bg-black/50 rounded-full p-2 z-[4] hover:bg-black/70 transition-all"
-              onClick={toggleMute}
-              aria-label={isMuted ? "Unmute" : "Mute"}
+              onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); if(videoRef.current) videoRef.current.muted = !isMuted; }}
             >
-              {isMuted ? (
-                <FaVolumeMute className="text-white text-xl" />
-              ) : (
-                <FaVolumeUp className="text-white text-xl" />
-              )}
+              {isMuted ? <VolumeX className="text-white" size={20} /> : <Volume2 className="text-white" size={20} />}
             </button>
           )}
         </div>
       </div>
 
       {isFullscreen && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-[9999] md:hidden">
-          <button
-            className="absolute top-4 left-4 text-white"
-            onClick={() => setIsFullscreen(false)}
-          >
-            <BackArrow size={28} />
-          </button>
-          <button
-            className="absolute top-4 right-4 text-white"
-            onClick={() => setIsFullscreen(false)}
-          >
-            <X size={28} />
-          </button>
-          <video
-            src={videoSrc}
-            poster={posterSrc}
-            autoPlay
-            controls
-            muted={isMuted}
-            className="max-h-[90%] max-w-[95%] object-contain rounded-lg"
-          />
+        <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-[9999] md:hidden p-4">
+          <button className="absolute top-6 left-6 text-white" onClick={() => setIsFullscreen(false)}><BackArrow size={30} /></button>
+          <button className="absolute top-6 right-6 text-white" onClick={() => setIsFullscreen(false)}><X size={30} /></button>
+          <video src={videoSrc} autoPlay controls className="max-h-[85%] max-w-full rounded-lg" />
         </div>
       )}
     </>
   );
-};
+});
 
 const CorporateVideosSection: React.FC = () => {
   const [videos, setVideos] = useState<any[]>([]);
   const [fetching, setFetching] = useState(true);
 
-  // API se data lane ka function
   const fetchCorporateVideos = useCallback(async () => {
     try {
       setFetching(true);
       const response = await axios.get(`${API_BASE}/corporate-videos`);
-      // API response published videos ko filter kar ke set karein
-      const data = response.data.filter((v: any) => v.status === "published");
-      setVideos(data);
+      setVideos(response.data.filter((v: any) => v.status === "published"));
     } catch (error) {
       console.error("Error fetching videos:", error);
     } finally {
@@ -252,28 +162,18 @@ const CorporateVideosSection: React.FC = () => {
     fetchCorporateVideos();
   }, [fetchCorporateVideos]);
 
-  if (fetching) return <div className="py-20 text-center text-white">Loading Videos...</div>;
+  if (fetching) return <div className="py-20 text-center text-white animate-pulse">Loading...</div>;
   if (videos.length === 0) return null;
 
   return (
-    <section className="w-full py-12 px-2 sm:px-4 lg:px-6 bg-black-900 pb-5">
+    <section className="w-full py-12 px-2 sm:px-4 lg:px-6 bg-black pb-5">
       <div className="max-w-8xl mx-auto">
-        <div className="text-left mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Our Corporate Videos
-          </h2>
+        <div className="text-left mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-white">Our Corporate Videos</h2>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {videos.map((video) => (
-            <VideoItem
-              key={video._id} // MongoDB ID use karein
-              label={video.label}
-              videoSrc={video.videoSrc}
-              posterSrc={video.posterSrc}
-              title={video.title}
-              description={video.description}
-            />
+            <VideoItem key={video._id} {...video} />
           ))}
         </div>
       </div>

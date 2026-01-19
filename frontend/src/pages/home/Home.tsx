@@ -61,7 +61,7 @@ const Home: React.FC = () => {
 
       {/* Baki sections tabhi load honge jab user scroll karega */}
       <LazySection><WebsiteSection /></LazySection>
-      {/* <LazySection><OurTechnologies /></LazySection>
+      <LazySection><OurTechnologies /></LazySection>
       <LazySection><SocialMediaSection /></LazySection>
       <LazySection><MobileAppSection /></LazySection>
       <LazySection><SocialMediaPostSection /></LazySection>
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
       <LazySection><ReviewsSection /></LazySection>
       <LazySection><OurClients /></LazySection>
       <LazySection><EnquireSection /></LazySection>
-      <LazySection><ChatBot /></LazySection> */}
+      <LazySection><ChatBot /></LazySection>
 
       <style>{`
         .home-container {
