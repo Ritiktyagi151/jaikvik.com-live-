@@ -77,25 +77,7 @@ const Home: React.FC = () => {
       <LazySection><EnquireSection /></LazySection>
       <LazySection><ChatBot /></LazySection>
 
-      <style>{`
-        .home-container {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          overflow-x: hidden;
-          gap: 20px;
-        }
-        .section-wrapper {
-          min-height: 200px; /* Placeholder height taaki scroll bar jump na kare */
-        }
-        .section-spacer {
-          height: 20px;
-        }
-        .section-placeholder {
-          height: 200px;
-          width: 100%;
-        }
-      `}</style>
+     
     </div>
   );
 };
